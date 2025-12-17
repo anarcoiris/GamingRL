@@ -1,137 +1,138 @@
 # DESIGN.md - Decisiones de Diseño del Proyecto GamingRL
 
-## 1. Objetivo del Workflow
+## 1. Visión General y Arquitectura
 
-Documentar y decidir antes de programar:
-- Reglas exactas del juego
-- Formato de observaciones y acciones
-- Esquema de recompensas
-- Métricas a monitorizar
-- Criterios de aceptación
-- API y contract testing
+Este documento centraliza las decisiones de diseño arquitectónico para todos los workflows del proyecto. Se mantiene actualizado para reflejar la implementación real.
 
-## 2. Decisiones de Alto Nivel
+### Arquitectura Modular
+El sistema se divide en tres componentes desacoplados:
+1.  **Environment (`env/`)**: Lógica pura, reglas y representación de estado.
+2.  **Agent (`agent/`)**: Redes neuronales y algoritmos de aprendizaje.
+3.  **Visualization (`viz/`)**: Instrumentación, logging y renderizado.
+
+---
+
+## 2. Entorno y Reglas (Workflow 1)
 
 ### 2.1 Juego Base
-- **Variante**: Damas clásicas (8×8, piezas en 32 casillas útiles)
-- **Turnos**: Alternos, jugador 1 (agente) siempre inicia (configurable)
-- **Captura forzada**: Sí (si hay captura disponible, se debe tomar)
-- **Preferir captura más larga**: Sí (configurable)
-- **Coronación (kinging)**: Al llegar a la última fila
-- **Múltiples saltos**: Permitidos y obligatorios si disponibles
-- **Empate**: 
-  - Si no hay movimiento legal para ninguno en N pasos
-  - Repetición de posición M veces
-  - Valores ajustables por config
+- **Variante**: Damas clásicas (8×8, US rules).
+- **Captura forzada**: Sí (obligatorio tomar capturas si existen).
+- **Preferir captura más larga**: Sí (regla de cantidad, no calidad).
+- **Coronación**: Al detenerse en la última fila.
+- **Empate**: Por límite de turnos o repetición de posiciones.
 
-### 2.2 Observabilidad
-- **Tipo**: Full-observable (tablero completo)
-- **Formato**: Tensor 4×8×8 (canales: own men, own kings, opp men, opp kings)
-- **Justificación**: Conveniente para CNNs y visualización
+### 2.2 Observabilidad (State Representation)
+- **Formato**: Tensor `(4, 8, 8)` tipo `float32`.
+- **Canales**:
+  0. `own_men`: Piezas normales propias (1.0).
+  1. `own_kings`: Reyes propios (1.0).
+  2. `opp_men`: Piezas normales oponentes (1.0).
+  3. `opp_kings`: Reyes oponentes (1.0).
+- **Justificación**: Representación espacial óptima para CNNs, separando semánticamente los tipos de piezas.
 
-### 2.3 Entorno
-- **Implementación**: Python, Gym-like (compatible con wrappers)
-- **Framework**: PyTorch-friendly
-- **Determinismo**: Total (seed controlado)
+### 2.3 Espacio de Acciones
+- **Tipo**: Dinámico (lista variable de acciones legales).
+- **Formato de Acción (JSON)**:
+  ```json
+  {
+    "from": [row, col],
+    "to": [row, col],
+    "captures": [[r,c], ...],
+    "promotion": bool
+  }
+  ```
+- **Encoding para Red**: Vector de 5 floats normalizados `[from_r, from_c, to_r, to_c, n_captures]`.
 
-## 3. Representación del Estado (Observación)
+---
 
-### 3.1 Formato Elegido: Tensor 4×8×8
+## 3. Agente y Red Neuronal (Workflow 2)
 
-obs = np.float32 array shape (4, 8, 8):
-  - canal 0 = own men (1.0 en casilla si own man)
-  - canal 1 = own kings
-  - canal 2 = opp men
-  - canal 3 = opp kings
-### 3.2 Metadatos Opcionales
-- `current_player`: 1 o -1
-- `legal_actions_mask`: vector booleano con dim = N_total_actions
+### 3.1 Arquitectura: Action-Value Network
+A diferencia de DQN tradicional (que saca un Q para cada acción fija), usamos una arquitectura que evalúa pares `(estado, acción)`. Esto permite manejar un espacio de acciones variable y grande.
 
-## 4. Espacio de Acciones
+**A. State Encoder (CNN)**
+Procesa el tablero para extraer features espaciales.
+- `Conv2d(4 -> 32, 3x3)` + ReLU
+- `Conv2d(32 -> 64, 3x3)` + ReLU
+- `Flatten`
+- `Linear` -> `Hidden Dim (256)` -> `Latent Dim (128)`
 
-### 4.1 Enfoque Elegido: Acciones Dinámicas
-- El env expondrá `get_legal_actions()` que devuelve lista de acciones serializables
-- El agente manejará masking / mapeo
-- Ventaja: Implementación más limpia, evita enumeración fija
+**B. Action Encoder (MLP)**
+Procesa las características de la acción candidata.
+- Input: 5 features espaciales normalizadas.
+- `Linear(5 -> 32)` + ReLU
 
-### 4.2 Estructura de una Acción (JSON)
-{
-  "from": [2, 5],      // fila, col
-  "to": [3, 4],        // fila, col
-  "captures": [[3,4]]  // lista de posiciones capturadas (multi-jump)
-}
+**C. Q-Head (Fusion)**
+Combina estado y acción para estimar Q.
+- Concatena `[State Features (128), Action Features (32)]`.
+- `Linear(160 -> 256)` + ReLU.
+- `Linear(256 -> 1)` (Q-value escalar).
+
+### 3.2 Algoritmo DQN
+- **Policy**: Epsilon-Greedy con decay lineal.
+- **Buffer**: Replay Buffer circular (`deque`).
+- **Storage**: Transiciones `(state, action_dict, reward, next_state, done)`.
+- **Target Network**: Actualización periódica (copia "hard" de pesos).
+- **Loss**: MSE entre `Q(s,a)` y `r + gamma * max_a' Q_target(s', a')`.
+
+### 3.3 Aproximación de Target
+Para calcular `max_a' Q(s', a')` en un espacio de acciones dinámico, idealmente se evaluarían todas las acciones legales reales de `s'`.
+- **Simplificación Actual**: Se aproxima usando las features de la acción original si es necesario, o evaluación completa si el entorno lo permite en el loop de entrenamiento.
+- **Decisión**: El training loop actual soporta evaluación real si se le pasa el env, o aproximación.
+
+---
+
+## 4. Visualización e Instrumentación (Workflow 3)
+
+### 4.1 Estrategia de Logging
+La observabilidad es "first-class citizen". No se entrena a ciegas.
+
+- **TB Logger**: Wrapper sobre `SummaryWriter` de TensorBoard.
+- **Métricas**:
+  - `Escalars`: Loss, Reward, Epsilon, Win Rate.
+  - `Histograms`: Distribución de pesos y gradientes (detectar saturación).
+  - `Images`: Snapshots del tablero en momentos críticos.
+
+### 4.2 Introspección (PyTorch Hooks)
+Para entender la "caja negra" de la CNN.
+- **Activation Hooks**: Capturan el output de capas `Conv2d` y `Linear`.
+- **Uso**: Detección de "dead neurons" (activación cero constante) y visualización de feature maps.
+- **Gradient Hooks**: Monitorean el flujo hacia atrás para detectar vanishing/exploding gradients.
+
+### 4.3 Renderizado
+- **BoardRenderer**: Clase agnóstica de backend.
+- **Backends**: 
+  - `ASCII`: Para logs de texto y debugging rápido.
+  - `Rich`: Para terminales modernas, con colores y tablas.
+- **Overlays**: Capacidad de superponer Q-values sobre las casillas para visualizar la "intuición" del agente.
+
+---
+
 ## 5. Recompensa (Reward Shaping)
 
-### 5.1 Esquema Inicial
-- `+1.0` por victoria (al final del episodio)
-- `-1.0` por derrota
-- `0.0` por empate
-- `+0.01` por captura de pieza enemiga (shaping)
-- `+0.02` por coronación (hacer un king)
-- `-0.001` por cada paso (time penalty)
+El esquema actual busca equilibrar la señal densa (capturas) con el objetivo final (ganar).
 
-### 5.2 Justificación
-- Shaping moderado para facilitar convergencia inicial
-- Time penalty para desalentar partidas infinitas
-- Recompensas intermedias vs sparse: balanceado
+| Evento | Reward | Justificación |
+|--------|--------|---------------|
+| **Win** | `+1.0` | Objetivo principal. |
+| **Loss**| `-1.0` | Castigo simétrico. |
+| **Draw**| `0.0` | Neutral. |
+| **Capture** | `+0.01` | Incentivo táctico pequeño (shaping). |
+| **King** | `+0.02` | Incentivo estratégico. |
+| **Step** | `-0.001` | Penalización por tiempo (evitar loops). |
 
-## 6. Métricas y Logs
+---
 
-### 6.1 Métricas Principales
-- `episode_reward` (suma total)
-- `win_rate` (por n episodes)
-- `avg_reward_per_step`
-- `avg_episode_length`
-- `loss` (TD loss)
-- `avg_q_value`, `max_q_value`
-- `gradient_norm` (L2 norm per update)
-- `weight_histograms` (por capa)
-- `action_distribution` (qué acciones elige el agente)
-- `legal_action_count` (por estado)
+## 6. Configuración
 
-## 7. Configuración
+Todo el comportamiento se define en `config/checkers_rules.json`.
+- `capture_forced`: `true` (Regla estándar).
+- `max_episode_steps`: `200` (Evitar juegos infinitos).
+- `draw_repetition_threshold`: `3` (Regla estándar).
 
-### 7.1 Archivo: `config/checkers_rules.json`
-{
-  "board_size": 8,
-  "use_32_indexing": false,
-  "capture_forced": true,
-  "prefer_longest_capture": true,
-  "king_on_last_row": true,
-  "max_episode_steps": 200,
-  "draw_repetition_threshold": 3,
-  "draw_move_threshold": 100
-}
-## 8. Casos Límite y Decisiones Controversiales
+---
 
-### 8.1 Coronar y Seguir Capturando
-**Decisión**: Si una pieza corona a mitad de secuencia de capturas, puede seguir capturando como rey en la misma secuencia.
-
-### 8.2 Prefer Longest Capture
-**Decisión**: Si hay múltiples secuencias de captura, se debe elegir la que capture más piezas. En caso de empate, se elige la primera encontrada.
-
-### 8.3 Repetición de Posición
-**Decisión**: Se registra hash de tableros para detectar repeticiones. Si la misma posición se repite 3 veces, se declara empate.
-
-### 8.4 Regla de 3 Turnos sin Captura
-**Decisión**: No implementada inicialmente. Se usa `draw_move_threshold` para evitar loops infinitos.
-
-## 9. Criterios de Aceptación (Workflow 0 → 1)
-
-- [ ] DESIGN.md completado y revisado
-- [ ] State y action representation decididos y documentados
-- [ ] Config file de reglas con tests unitarios que validen reglas formales
-- [ ] Test cases manuales que demuestren que `get_legal_actions()` devuelve la lista correcta en > 20 escenarios críticos
-- [ ] Implementación inicial del entorno (Workflow 1) pasa todos tests de legalidad y determinismo
-
-## 10. Checklist Mínimo (Workflow 0)
-
-- [x] Elegir variante de damas (documentado)
-- [x] Especificar observación y acción (ejemplo y justificación)
-- [x] Definir reward shaping y parámetros iniciales
-- [x] Definir métricas a monitorizar
-- [ ] Crear archivo `config/checkers_rules.json`
-- [ ] Preparar 10 tableros de test con soluciones esperadas (incluidos edge cases)
-- [x] Redactar DESIGN.md (incluye todo lo anterior)
-```
-
+## 7. Próximos Pasos de Diseño
+- **Curriculum Learning**: Introducir oponentes progresivamente más difíciles.
+- **Self-Play**: Entrenar agente contra versiones pasadas de sí mismo.
+- **MCTS**: Explorar Monte Carlo Tree Search para mejorar la selección de acciones (Workflow futuro).

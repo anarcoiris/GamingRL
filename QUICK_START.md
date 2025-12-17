@@ -23,7 +23,7 @@ python training/train_dqn.py --num_steps 10000 --output_dir checkpoints/demo
 ### 3. Visualize Training
 Monitor loss, reward, and agent internals using TensorBoard.
 ```bash
-tensorboard --logdir logs/
+python -m tensorboard.main --logdir logs/
 ```
 *Open http://localhost:6006 in your browser.*
 

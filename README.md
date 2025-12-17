@@ -46,7 +46,7 @@ python training/train_dqn.py --num_steps 10000 --output_dir checkpoints/demo
 ### 3. Visualizar Progreso
 Monitorea métricas de pérdida, recompensa y evolución de pesos en tiempo real.
 ```bash
-tensorboard --logdir logs/
+python -m tensorboard.main --logdir logs/
 ```
 
 ### 4. Simulación Rápida

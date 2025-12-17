@@ -3,9 +3,16 @@
 import argparse
 import json
 import random
+import sys
+from typing import Tuple, Dict, Optional
 from pathlib import Path
 import numpy as np
 import torch
+
+# Add project root to path
+project_root = str(Path(__file__).parent.parent)
+if project_root not in sys.path:
+    sys.path.append(project_root)
 
 from env.checkers_env import CheckersEnv
 from agent.dqn import DQNAgent

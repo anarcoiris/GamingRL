@@ -97,6 +97,6 @@ pytest agent/tests/
 
 ## Documentación Adicional
 
-- Ver `docs/research/WORKFLOW_2_DQN_RESEARCH.md` para investigación
+
 - Ver `DESIGN.md` para decisiones de diseño
 

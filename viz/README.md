@@ -211,4 +211,4 @@ logger.close()
 ## Documentación Adicional
 
 - Ver `docs/research/WORKFLOW_3_VISUALIZATION_RESEARCH.md` para investigación detallada
-- TensorBoard: `tensorboard --logdir=logs/`
+- TensorBoard: `python -m tensorboard.main --logdir=logs/`
