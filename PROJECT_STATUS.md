@@ -1,13 +1,14 @@
 # Estado del Proyecto GamingRL
 
-**Última actualización**: 2024-12-17
+**Última actualización**: 2025-12-17
 
 ## Resumen Ejecutivo
 
-El proyecto GamingRL está en desarrollo activo. Se han completado los primeros 2 workflows fundamentales:
+El proyecto GamingRL está en desarrollo activo. Se han completado los primeros 4 workflows fundamentales:
 - ✅ WORKFLOW 0: Definición y Diseño
 - ✅ WORKFLOW 1: Entorno Gym-like (MVP)
 - ✅ WORKFLOW 2: DQN Básico
+- ✅ WORKFLOW 3: Visualización e Instrumentación
 
 ## Estado de Workflows
 
@@ -203,15 +204,38 @@ Todos los componentes principales funcionan correctamente.
 2. **Cobertura de tests**: Expandir tests para cubrir más casos edge.
 3. **Performance**: Optimizar generación de movimientos si es necesario.
 
+### WORKFLOW 3: Visualización e Instrumentación ✅ COMPLETADO
+
+**Fecha de completación**: 2025-12-17
+
+**Entregables**:
+- ✅ `viz/tb_logger.py` - TensorBoardLogger con métricas, histogramas, Q-values
+- ✅ `viz/hooks.py` - HookManager para activaciones y gradientes
+- ✅ `viz/board_renderer.py` - BoardRenderer con Rich/ASCII y Q-overlay
+- ✅ `viz/live_plot.py` - TrainingDashboard y LivePlot
+- ✅ Tests unitarios: 34/34 pasando
+- ✅ `viz/README.md` - Documentación completa
+
+**Validación**:
+- ✅ TensorBoard logging funcional
+- ✅ Hooks capturan activaciones y gradientes
+- ✅ BoardRenderer produce visualizaciones ASCII y Rich
+- ✅ Live plotting con matplotlib
+- ✅ Replay de episodios
+
+**Tests**:
+- `viz/tests/test_tb_logger.py` - 13 tests
+- `viz/tests/test_hooks.py` - 12 tests  
+- `viz/tests/test_board_renderer.py` - 9 tests
+
 ## Próximos Pasos
 
-### WORKFLOW 3: Visualización e Instrumentación
+### WORKFLOW 4: GUI Interactiva (opcional)
 
 **Pendiente**:
-- [ ] `viz/tb_logger.py` - Logging a TensorBoard
-- [ ] `viz/hooks.py` - Hooks de PyTorch
-- [ ] `viz/board_renderer.py` - Renderizado avanzado
-- [ ] Visualizaciones funcionando
+- [ ] Interfaz PyGame o web
+- [ ] Visualización interactiva de entrenamiento
+- [ ] Modo humano vs agente
 
 ## Comandos de Verificación Rápida
 
