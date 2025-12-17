@@ -1,59 +1,91 @@
-# GamingRL - Proyecto de Reinforcement Learning
+# GamingRL - Proyecto Acelerado de Reinforcement Learning
 
-Proyecto de investigación y desarrollo para construir un agente DQN que aprenda a jugar damas, con visualización profunda y escalado progresivo hacia sistemas más complejos.
+![Status: W0-W3 Complete](https://img.shields.io/badge/Workflow-0--3_Complete-green)
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-orange)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-## Estructura del Proyecto
+Plataforma integral de investigación para agentes de Reinforcement Learning en juegos de mesa, progresando desde Damas (Checkers) hacia entornos de alta complejidad. El proyecto prioriza la arquitectura modular, la reproducibilidad y la instrumentación profunda.
+
+## 🏗 Arquitectura del Sistema
+
+El sistema se compone de tres pilares desacoplados que permiten iteración rápida y aislamiento de responsabilidades.
 
 ```
 GamingRL/
-├── config/              # Archivos de configuración
-├── env/                 # Entornos (Gym-like)
-├── agent/               # Agentes RL
-├── training/            # Scripts de entrenamiento
-├── viz/                 # Visualización
-├── ui/                  # Interfaces de usuario
-├── experiments/         # Configs y experimentos
-├── docs/                # Documentación
-│   └── research/        # Investigación temática por workflow
-└── tests/               # Tests unitarios
+├── env/                 # Core Lógico
+│   ├── checkers_env.py  # Gym compliant wrapper
+│   └── rules.py         # Motor de reglas puro y determinista
+├── agent/               # Cerebro
+│   ├── dqn.py           # Implementación DQN optimizada
+│   └── network.py       # Arquitecturas CNN espaciales
+├── viz/                 # Ojos e Instrumentación
+│   ├── tb_logger.py     # Integración profunda con TensorBoard
+│   ├── hooks.py         # Análisis de activaciones/gradientes
+│   └── board_renderer.py # Visualización Rich/ASCII
 ```
 
-## Workflows
+### Características Clave
+*   **Entorno Vectorizado**: Representación de estado tensor `(4, 8, 8)` ideal para CNNs.
+*   **Agente DQN Robusto**: Buffer de repetición circular, target networks, y clipping de gradientes.
+*   **Observabilidad Total**: Pipeline de logging que permite inspeccionar la "caja negra" de la red neuronal capa por capa.
 
-El proyecto sigue un enfoque estricto de workflows:
+## 🚀 Quick Start
 
-- **WORKFLOW 0**: Definición y Diseño (DESIGN.md)
-- **WORKFLOW 1**: Entorno Gym-like (MVP)
-- **WORKFLOW 2**: DQN Básico
-- **WORKFLOW 3**: Visualización e Instrumentación
-- **WORKFLOW 4**: GUI Interactiva (opcional)
-- **WORKFLOW 5**: Experimentos y Evaluación
-- **WORKFLOW 6**: Hardening y Escalado
-
-## Documentación
-
-- [DESIGN.md](DESIGN.md) - Decisiones de diseño
-- [STANDARDS.md](STANDARDS.md) - Estándares del proyecto
-- [RULES.md](RULES.md) - Reglas de desarrollo
-- [docs/research/](docs/research/) - Investigación temática por workflow
-- [docs/research/CRITICAL_ANALYSIS.md](docs/research/CRITICAL_ANALYSIS.md) - Análisis crítico y preguntas
-
-## Instalación
-
+### 1. Instalación
 ```bash
 pip install -r requirements.txt
 ```
 
-## Uso
-
-(Próximamente - cuando se complete WORKFLOW 1)
-
-## Desarrollo
-
-Ver [STANDARDS.md](STANDARDS.md) y [RULES.md](RULES.md) para estándares y reglas de desarrollo.
-
-## Roadmap
-
-Ver [roadmap_dqn_checkers_to_star_craft.md](roadmap_dqn_checkers_to_star_craft.md) para el roadmap completo.
-
+### 2. Entrenar Agente (Training Loop)
+Entrena un agente DQN desde cero. Los checkpoints se guardan automáticamente.
+```bash
+python training/train_dqn.py --num_steps 10000 --output_dir checkpoints/demo
 ```
+
+### 3. Visualizar Progreso
+Monitorea métricas de pérdida, recompensa y evolución de pesos en tiempo real.
+```bash
+tensorboard --logdir logs/
+```
+
+### 4. Simulación Rápida
+Ejecuta partidas de prueba con agentes aleatorios para validar el entorno.
+```bash
+python examples/play_random.py
+```
+
+## 🗺 Estado del Proyecto
+
+El desarrollo sigue una metodología estricta de Workflows secuenciales.
+
+| Workflow | Estado | Entregables Clave |
+|----------|--------|-------------------|
+| **W0: Definición** | ✅ Completo | `DESIGN.md`, Specs, Config JSON |
+| **W1: Entorno** | ✅ Completo | Gym Env, Motor de Reglas, 21+ Tests |
+| **W2: DQN Básico** | ✅ Completo | Agente Funcional, Training Loop, Checkpoints |
+| **W3: Visualización** | ✅ Completo | TensorBoard, Hooks de Activación, Rich Renderer |
+| **W4: GUI** | 🚧 Pendiente | Interfaz Interactiva Web/PyGame |
+| **W5: Experimentos** | 📅 Futuro | Benchmarking masivo |
+
+## 📚 Documentación Técnica
+
+Para profundizar en áreas específicas:
+
+*   **[DESIGN.md](DESIGN.md)**: Racional detrás de las decisiones arquitectónicas (e.g., por qué CNN vs MLP).
+*   **[env/README.md](env/README.md)**: Detalles sobre el tensor de estado y reglas de captura forzada.
+*   **[agent/README.md](agent/README.md)**: Hiperparámetros del DQN y arquitectura de red.
+*   **[viz/README.md](viz/README.md)**: Guía para usar hooks de introspección y logging avanzado.
+*   **[STANDARDS.md](STANDARDS.md)**: Guía de estilo de código y convenciones de testing.
+
+## 🤝 Contribución y Desarrollo
+
+El proyecto impone estándares de calidad estrictos:
+1.  **Tests Obligatorios**: Todo código nuevo debe incluir tests en `tests/`.
+2.  **Linting**: El código debe cumplir con `black` y `ruff`.
+3.  **Workflows Atómicos**: No avanzar de fase sin completar los criterios de aceptación previos.
+
+Ver **[RULES.md](RULES.md)** para el protocolo completo de desarrollo.
+
+---
+*GamingRL Research Engine - 2025*
