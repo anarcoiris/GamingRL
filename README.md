@@ -43,16 +43,26 @@ Entrena un agente DQN desde cero. Los checkpoints se guardan automáticamente.
 python training/train_dqn.py --num_steps 10000 --output_dir checkpoints/demo
 ```
 
-### 3. Visualizar Progreso
+### 3. Jugar contra el Bot (Interactive Play)
+Juega interactivamente contra diferentes tipos de agentes (humano, random, heurístico o DQN).
+```bash
+# Humano vs Heurístico (default)
+python play.py
+
+# Humano vs DQN (cargando checkpoint)
+python play.py --p2 dqn --p2_checkpoint checkpoints/demo/checkpoint_final.pt
+```
+
+### 4. Ver Repeticiones (Game Replay)
+Visualiza partidas guardadas previamente en la carpeta `data/generated`.
+```bash
+python replay.py data/generated/tu_partida.json
+```
+
+### 5. Visualizar Progreso (Monitoring)
 Monitorea métricas de pérdida, recompensa y evolución de pesos en tiempo real.
 ```bash
 python -m tensorboard.main --logdir logs/
-```
-
-### 4. Simulación Rápida
-Ejecuta partidas de prueba con agentes aleatorios para validar el entorno.
-```bash
-python examples/play_random.py
 ```
 
 ## 🗺 Estado del Proyecto
@@ -65,7 +75,7 @@ El desarrollo sigue una metodología estricta de Workflows secuenciales.
 | **W1: Entorno** | ✅ Completo | Gym Env, Motor de Reglas, 21+ Tests |
 | **W2: DQN Básico** | ✅ Completo | Agente Funcional, Training Loop, Checkpoints |
 | **W3: Visualización** | ✅ Completo | TensorBoard, Hooks de Activación, Rich Renderer |
-| **W4: GUI** | 🚧 Pendiente | Interfaz Interactiva Web/PyGame |
+| **W4: Sistema Interactivo** | ✅ Completo | `play.py`, CLI Interaction, Agent Loader |
 | **W5: Experimentos** | 📅 Futuro | Benchmarking masivo |
 
 ## 📚 Documentación Técnica

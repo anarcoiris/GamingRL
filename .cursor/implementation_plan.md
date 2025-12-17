@@ -1,37 +1,59 @@
-# Implementation Plan: Documentation Overhaul
+# Implementation Plan: Interactive Human vs Bot System
 
 ## Goal Description
-Elevate the project documentation to professional standards, reflecting the completion of Workflows 0-3. The documentation should serve as a comprehensive entry point for technical users, explaining not just *how* to run the code, but *why* it is structured this way and *what* the architectural components are.
+Enable interactive "Human vs Bot" games via a robust CLI (and extensible for future GUI), allowing testing of trained agents against humans or other baselines. Centralize agent loading and user interaction logic effectively.
 
 ## User Review Required
-- [ ] Review the proposed `README.md` structure.
-- [ ] Confirm if any specific architectural diagrams are requested (ASCII/Mermaid).
+- [ ] Confirm if `play.py` should be at root or in `scripts/`. (Proposed: Root for accessibility).
+- [ ] confirm if `rich` library is acceptable for the primary CLI interface (fallback to ASCII if missing).
 
 ## Proposed Changes
 
-### 1. Root `README.md` Overhaul
-The current README is a stub. It will be expanded to include:
-- **Project Status Badge**: Clearly indicating W0-W3 Complete.
-- **Architectural Overview**: A high-level description of the system components (Env, Agent, Viz).
-- **Quick Start**: Verified commands to train and play immediately.
-- **Detailed Component Breakdown**:
-    - **Environment**: Rules, State Representation (Tensor 4x8x8).
-    - **Agent**: DQN, CNN Architecture, Replay Buffer.
-    - **Visualization**: TensorBoard, Custom Hooks, Rich Renderer.
-- **Development Workflow**: References to the strict workflow system.
+### 1. Centralized Agent Loading (`agent/loader.py`)
+Create a factory to instantiate agents easily.
+- **Support**: `random`, `heuristic`, `dqn` (from checkpoint).
+- **Interface**: `load_agent(type, config_path, checkpoint_path=None)`.
 
-### 2. Module Documentation Check
-- Ensure `env/README.md`, `agent/README.md`, and `viz/README.md` are linked and aligned with the root README.
+### 2. Interaction Module (`ui/interaction.py`)
+Decouple input handling from game logic.
+- **Move Parsing**: Handle `a3->b4`, `5,0 4,1`, etc.
+- **Validation**: Check against legal moves.
+- **Display**: Use `viz.board_renderer` for output.
 
-### 3. File Updates
-#### [MODIFY] [README.md](file:///c:/Users/soyko/Documents/GamingRL/README.md)
-- Complete rewrite to reflect current mature state.
+### 3. Main Entry Point (`play.py`)
+A clean script to run games.
+- **Args**: `--player1`, `--player2`, `--render_mode`.
+- **Logic**: Game loop reusing `CheckersEnv`.
+- **Logging**: Integrate `GameLogger` to save replays.
 
-#### [MODIFY] [project_status.md](file:///c:/Users/soyko/Documents/GamingRL/PROJECT_STATUS.md)
-- Ensure it is synchronized (already done, but will double check).
+### 4. File Structure Updates
+#### [NEW] [agent/loader.py](file:///c:/Users/soyko/Documents/GamingRL/agent/loader.py)
+#### [NEW] [ui/interaction.py](file:///c:/Users/soyko/Documents/GamingRL/ui/interaction.py)
+#### [NEW] [play.py](file:///c:/Users/soyko/Documents/GamingRL/play.py)
+#### [MODIFY] [env/utils.py](file:///c:/Users/soyko/Documents/GamingRL/env/utils.py) (Optional, if helpers needed)
 
 ## Verification Plan
-### Manual Verification
-- Render the markdown to ensure formatting is correct.
-- Verify all file links work.
-- Copy-paste "Quick Start" commands to verify they work as written.
+### Manual Verification (report to user for him to verify)
+- Play a full game Human vs Random. Make human play first.
+- Play a few moves Human vs Heuristic to verify input parsing solidity. Make human play second.
+- Load a DQN checkpoint and verify inference runs.
+- Check generated JSON logs in `data/generated/`.
+
+## Documentation & Architecture Tasks
+
+### Planning / Analysis (report to user before commencing to change mode)
+- [ ] Analyze `DESIGN.md` (brief check for alignment)
+- [ ] Analyze module-level READMEs (env, agent, viz)
+- [ ] Create Implementation Plan
+- [ ] Define structure for new `README.md`
+- [ ] Identify other documents needing updates
+
+### Execution (report to user before commencing to change mode)
+- [ ] Execute documentation updates
+- [ ] Update root `README.md`
+- [ ] Ensure all links are valid
+- [ ] Add architectural diagrams (Mermaid) if applicable
+
+### Verification (report to user before commencing to change mode)
+- [ ] Review against "Senior Architect" persona standards
+- [ ] Verify formatting

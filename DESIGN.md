@@ -10,6 +10,42 @@ El sistema se divide en tres componentes desacoplados:
 2.  **Agent (`agent/`)**: Redes neuronales y algoritmos de aprendizaje.
 3.  **Visualization (`viz/`)**: Instrumentación, logging y renderizado.
 
+### Diagramas de Arquitectura
+
+#### Flujo de Datos y Componentes
+```mermaid
+graph TD
+    User([Usuario/CLI]) --> Interaction[ui/interaction.py]
+    Interaction --> Play[play.py]
+    Play --> Env[env/checkers_env.py]
+    Play --> Agent[agent/loader.py]
+    Play --> Viz[viz/board_renderer.py]
+    Agent --> DQN[agent/dqn.py]
+    Agent --> Heuristic[agent/heuristic_agent.py]
+    Env --> Rules[env/rules.py]
+    DQN --> NN[agent/network.py]
+    Viz --> TB[viz/tb_logger.py]
+```
+
+#### Ciclo de Juego (Game Loop)
+```mermaid
+sequence_diagram
+    participant P as play.py
+    participant E as env/CheckersEnv
+    participant A as agent/Agent
+    participant V as viz/BoardRenderer
+    
+    P->>E: reset()
+    loop hasta terminal
+        P->>E: get_legal_actions()
+        P->>V: render(board)
+        P->>A: select_action(obs, legal_actions)
+        A-->>P: action
+        P->>E: step(action)
+        E-->>P: next_obs, reward, done
+    end
+```
+
 ---
 
 ## 2. Entorno y Reglas (Workflow 1)
