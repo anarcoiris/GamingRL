@@ -1,0 +1,34 @@
+{
+  "test_id": "test_005",
+  "description": "Coronación por movimiento simple",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [7, 1],
+      "to": [6, 0],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [7, 1],
+      "to": [6, 2],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Pieza roja en última fila ya es rey, puede moverse en cualquier dirección."
+}
+

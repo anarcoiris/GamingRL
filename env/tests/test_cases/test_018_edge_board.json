@@ -1,0 +1,27 @@
+{
+  "test_id": "test_018",
+  "description": "Movimientos en los bordes del tablero",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [7, 0],
+      "to": [6, 1],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Pieza en esquina solo puede moverse en una dirección."
+}
+

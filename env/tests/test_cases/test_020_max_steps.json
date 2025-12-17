@@ -1,0 +1,29 @@
+{
+  "test_id": "test_020",
+  "description": "Empate por alcanzar máximo de pasos",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [2, 0, -2, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "step_count": 200,
+  "max_episode_steps": 200,
+  "expected_legal_moves": [
+    {
+      "from": [7, 0],
+      "to": [6, 1],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": "draw",
+  "notes": "Al alcanzar max_episode_steps, debe declararse empate."
+}
+

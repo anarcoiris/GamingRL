@@ -1,0 +1,27 @@
+{
+  "test_id": "test_014",
+  "description": "Rey capturando hacia atrás",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 0, 0, 0, 0],
+    [0, 0, 0, 0, -1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [3, 3],
+      "to": [5, 5],
+      "captures": [[4, 4]],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Rey puede capturar hacia atrás (dirección opuesta a movimiento normal)."
+}
+

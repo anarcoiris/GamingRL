@@ -1,0 +1,41 @@
+{
+  "test_id": "test_001",
+  "description": "Movimiento simple de pieza normal hacia adelante",
+  "board_state": [
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [-1, 0, -1, 0, -1, 0, -1, 0],
+    [0, -1, 0, -1, 0, -1, 0, -1],
+    [-1, 0, -1, 0, -1, 0, -1, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [5, 0],
+      "to": [4, 1],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [5, 2],
+      "to": [4, 1],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [5, 2],
+      "to": [4, 3],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Caso básico: pieza roja en posición inicial puede moverse diagonalmente hacia adelante"
+}
+

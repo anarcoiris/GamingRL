@@ -1,0 +1,34 @@
+{
+  "test_id": "test_011",
+  "description": "Rey realizando captura",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 0, 0, 0, 0],
+    [0, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [3, 3],
+      "to": [5, 1],
+      "captures": [[4, 2]],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [3, 3],
+      "to": [5, 5],
+      "captures": [[4, 4]],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Rey puede capturar en cualquier dirección diagonal."
+}
+

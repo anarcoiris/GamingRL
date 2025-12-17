@@ -1,0 +1,19 @@
+{
+  "test_id": "test_008",
+  "description": "Pieza bloqueada sin movimientos legales",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, -1, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": -1,
+  "expected_legal_moves": [],
+  "expected_outcome": "win",
+  "notes": "Pieza negra bloqueada, jugador rojo gana."
+}
+

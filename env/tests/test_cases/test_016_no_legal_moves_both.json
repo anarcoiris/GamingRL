@@ -1,0 +1,19 @@
+{
+  "test_id": "test_016",
+  "description": "Empate cuando ambos jugadores no tienen movimientos legales",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [2, 0, -2, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [],
+  "expected_outcome": "draw",
+  "notes": "Ambos reyes bloqueados, empate."
+}
+

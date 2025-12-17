@@ -1,0 +1,19 @@
+{
+  "test_id": "test_021",
+  "description": "Posición compleja de final de partida",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 2, 0, -1, 0, 0, 0, 0],
+    [0, 0, -2, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves_count": ">0",
+  "expected_outcome": null,
+  "notes": "Posición compleja con reyes y piezas normales. Debe generar movimientos legales correctos."
+}
+

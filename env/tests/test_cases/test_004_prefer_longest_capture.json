@@ -1,0 +1,27 @@
+{
+  "test_id": "test_004",
+  "description": "Preferir captura más larga cuando hay múltiples opciones",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, -1, 0, -1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0],
+    [0, -1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [5, 0],
+      "to": [1, 4],
+      "captures": [[6, 1], [4, 2], [3, 2], [3, 4]],
+      "promotion": true,
+      "sequence_length": 4
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Debe elegir secuencia que capture 4 piezas en lugar de secuencias más cortas."
+}
+

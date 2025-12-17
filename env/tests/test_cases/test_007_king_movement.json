@@ -1,0 +1,48 @@
+{
+  "test_id": "test_007",
+  "description": "Movimiento de rey en cualquier dirección",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [4, 3],
+      "to": [3, 2],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [4, 3],
+      "to": [3, 4],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [4, 3],
+      "to": [5, 2],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    },
+    {
+      "from": [4, 3],
+      "to": [5, 4],
+      "captures": [],
+      "promotion": false,
+      "sequence_length": 1
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Rey puede moverse en 4 direcciones diagonales."
+}
+

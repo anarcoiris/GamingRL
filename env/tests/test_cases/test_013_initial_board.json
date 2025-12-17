@@ -1,0 +1,19 @@
+{
+  "test_id": "test_013",
+  "description": "Tablero inicial - todas las piezas en posición de inicio",
+  "board_state": [
+    [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [-1, 0, -1, 0, -1, 0, -1, 0],
+    [0, -1, 0, -1, 0, -1, 0, -1],
+    [-1, 0, -1, 0, -1, 0, -1, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves_count": 7,
+  "expected_outcome": null,
+  "notes": "Tablero inicial estándar. Jugador 1 tiene 7 movimientos posibles desde las piezas delanteras."
+}
+

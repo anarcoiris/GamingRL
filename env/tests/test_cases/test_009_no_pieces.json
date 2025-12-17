@@ -1,0 +1,19 @@
+{
+  "test_id": "test_009",
+  "description": "Victoria por eliminar todas las piezas del oponente",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [],
+  "expected_outcome": "win",
+  "notes": "Solo quedan piezas del jugador 1, jugador -1 perdió todas sus piezas."
+}
+

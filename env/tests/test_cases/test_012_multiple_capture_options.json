@@ -1,0 +1,27 @@
+{
+  "test_id": "test_012",
+  "description": "Múltiples opciones de captura, elegir la más larga",
+  "board_state": [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, -1, 0, -1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0],
+    [0, -1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "current_player": 1,
+  "expected_legal_moves": [
+    {
+      "from": [5, 0],
+      "to": [1, 4],
+      "captures": [[6, 1], [4, 2], [3, 2], [3, 4]],
+      "promotion": true,
+      "sequence_length": 4
+    }
+  ],
+  "expected_outcome": null,
+  "notes": "Hay opción de capturar 1 pieza, pero debe elegir secuencia de 4 piezas."
+}
+
