@@ -72,6 +72,16 @@ Arquitectura CNN para evaluar Q-values:
 Buffer circular de experiencias:
 - Almacena (state, action, reward, next_state, done)
 - Muestreo uniforme para entrenamiento
+- `save()` y `load()` para persistencia
+
+### HeuristicAgent
+
+Agente basado en Minimax con Alpha-Beta pruning:
+- Determinista (o casi determinista)
+- Evaluación basada en material y control central
+- Configurable profundidad de búsqueda (depth)
+- Uso ideal: Benchmarkbaseline, oponente para entrenamiento, generación de partidas 
+- No requiere entrenamiento
 
 ## Dependencias
 

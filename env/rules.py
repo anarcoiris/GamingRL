@@ -360,34 +360,47 @@ class CheckersRules:
         """
         opponent = -current_player
 
-        # Check if opponent has no pieces
-        opponent_has_pieces = False
-        player_has_pieces = False
+        # Check pieces count
+        current_player_pieces = 0
+        opponent_pieces = 0
 
         for row in range(self.board_size):
             for col in range(self.board_size):
                 if not self.is_valid_square(row, col):
                     continue
                 piece = board[row, col]
-                if piece > 0:
-                    player_has_pieces = True
-                elif piece < 0:
-                    opponent_has_pieces = True
+                if piece == 0:
+                    continue
+                
+                # Check ownership
+                if (current_player == 1 and piece > 0) or (current_player == -1 and piece < 0):
+                    current_player_pieces += 1
+                else:
+                    opponent_pieces += 1
 
-        if not opponent_has_pieces:
+        if opponent_pieces == 0:
             return True, current_player  # Current player wins
-        if not player_has_pieces:
+        if current_player_pieces == 0:
             return True, opponent  # Opponent wins
 
         # Check if opponent has legal moves
-        opponent_moves = self.get_legal_moves(board, opponent)
-        if not opponent_moves:
-            return True, current_player  # Opponent has no moves, current player wins
-
-        # Check if current player has legal moves
+        # Note: If it's current_player's turn, we usually check if current_player has moves to see if they lose.
+        # But this function is generic. 
+        # Standard Checkers: A player loses if they cannot make a move ON THEIR TURN.
+        # This function is usually called after a move to update state.
+        # Calling with `current_player` usually means "It is now this player's turn, is the game over?"
+        
+        # If it is current_player's turn, do they have moves?
         player_moves = self.get_legal_moves(board, current_player)
         if not player_moves:
             return True, opponent  # Current player has no moves, opponent wins
 
+        # Check if opponent has moves (only relevant if we are checking "is game over" generally, 
+        # but technically we only care about the active player being unable to move).
+        # However, to be thorough:
+        # If the NEXT player has no moves, they lose.
+        # This function signature takes `current_player`.
+        # Assuming usage: reset() -> current=1. check terminal. step()-> current=-1. check terminal.
+        
         return False, None
 
